@@ -1,0 +1,10 @@
+- Create a temporary EC2 instance
+- Research steps needed to install our software 
+- Run each command one at time in order 
+- Check that your website (software) is working
+- Save each command in a script
+- That will create our Bash script
+- Create another temporary ec2 instance , with user data =
+- Validate the website (software) is working in the new instatnce 
+- ==> now you have good user data <===
+- You can delete both tempory instances

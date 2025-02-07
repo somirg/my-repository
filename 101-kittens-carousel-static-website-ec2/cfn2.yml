@@ -1,0 +1,40 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: |
+  Create static kittens carousel website
+  
+#Parameters:
+  
+Resources:
+
+  WebSecGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "String" # Required
+      GroupName: "String"
+      SecurityGroupEgress: 
+        - CidrIp: "String"
+          CidrIpv6: "String"
+          Description: "String"
+          DestinationPrefixListId: "String"
+          DestinationSecurityGroupId: "String"
+          FromPort: "Number"
+          IpProtocol: "String"
+          ToPort: "Number"
+      SecurityGroupIngress: 
+        - CidrIp: "String"
+          CidrIpv6: "String"
+          Description: "String"
+          FromPort: "Number"
+          IpProtocol: "String"
+          SourcePrefixListId: "String"
+          SourceSecurityGroupId: "String"
+          SourceSecurityGroupName: "String"
+          SourceSecurityGroupOwnerId: "String"
+          ToPort: "Number"
+      Tags: 
+        - Key: "String"
+          Value: "String"
+      VpcId: "String"
+  
+#Outputs:

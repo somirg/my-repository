@@ -7,34 +7,49 @@ Description: |
   
 Resources:
 
-  WebSecGroup:
+  WebSecGrp:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: "String" # Required
-      GroupName: "String"
-      SecurityGroupEgress: 
-        - CidrIp: "String"
-          CidrIpv6: "String"
-          Description: "String"
-          DestinationPrefixListId: "String"
-          DestinationSecurityGroupId: "String"
-          FromPort: "Number"
-          IpProtocol: "String"
-          ToPort: "Number"
+      GroupDescription: Allow SSH and HTTP from the Internet
+      GroupName: web-sec-group
       SecurityGroupIngress: 
-        - CidrIp: "String"
-          CidrIpv6: "String"
-          Description: "String"
-          FromPort: "Number"
-          IpProtocol: "String"
-          SourcePrefixListId: "String"
-          SourceSecurityGroupId: "String"
-          SourceSecurityGroupName: "String"
-          SourceSecurityGroupOwnerId: "String"
-          ToPort: "Number"
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: "0.0.0.0/0"
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: "0.0.0.0/0"
+
+  WebServer:
+    Type: AWS::EC2::Instance
+    Properties:
       Tags: 
-        - Key: "String"
-          Value: "String"
-      VpcId: "String"
+        - Key: Name
+          Value: altaz-kittens-server
+      ImageId: ami-085ad6ae776d8f09c
+      InstanceType: t2.micro
+      KeyName: altaz-clarusway
+      SecurityGroupIds: 
+        - Fn::GetAtt WebSecGrp.GroupId
+      UserData:
+        Fn::Base64: 
+          |
+            #!/bin/bash -x
+            yum update -y
+            yum install httpd -y
+            cd /var/www/html
+            FOLDER="https://raw.githubusercontent.com/altazbhanji/my-repository/refs/heads/main/101-kittens-carousel-static-website-ec2/static-web"
+            wget ${FOLDER}/index.html
+            wget ${FOLDER}/cat0.jpg
+            wget ${FOLDER}/cat1.jpg
+            wget ${FOLDER}/cat2.jpg
+            systemctl start httpd
+            systemctl enable httpd
   
-#Outputs:
+Outputs:
+
+  WebsiteUrl:
+    Description: Kittens carousel website URL
+    Value: !Join [ "", [ "http://", Fn::GetAtt WebServer.PublicDnsName ] ]
